@@ -1,0 +1,54 @@
+publisher:
+  build: .
+  command: python -u publisher.py
+  ports:
+    - "1030:1030"
+  volumes:
+    - .:/app
+
+server1:
+  build: .
+  command: python -u server1.py
+  ports:
+    - "1024:1024"
+  volumes:
+    - .:/app
+  links:
+    - publisher
+
+server2:
+  build: .
+  command: python -u server2.py
+  ports:
+    - "1025:1025"
+  volumes:
+    - .:/app
+  links:
+    - publisher
+
+  
+  
+
+server3:
+  build: .
+  command: python -u server3.py
+  ports:
+    - "1026:1026"
+  volumes:
+    - .:/app
+  links:
+    - publisher
+    
+client:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000
+  ports:
+    - "8000:8000"
+  volumes:
+    - .:/app
+  links:
+    - publisher
+    - server1
+    - server2
+    - server3
+    
